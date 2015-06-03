@@ -1,0 +1,30 @@
+{
+  "id": "/frontend-balancer",
+  "cpus": 0.2,
+  "mem": 256,
+  "instances": 1,
+  "constraints": [["hostname", "UNIQUE"]],
+  "acceptedResourceRoles": ["slave_public"],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "dparrish/dcos-proxy",
+      "network": "BRIDGE",
+      "portMappings": [
+          {
+              "containerPort": 80,
+              "hostPort": 80,
+              "protocol": "tcp"
+          }
+      ]
+    }
+  },
+  "healthChecks": [{
+      "protocol": "TCP",
+      "gracePeriodSeconds": 600,
+      "intervalSeconds": 30,
+      "portIndex": 0,
+      "timeoutSeconds": 10,
+      "maxConsecutiveFailures": 2
+  }]
+}
