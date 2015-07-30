@@ -31,3 +31,11 @@ directed to the first port supplied.
     "ports": [5000]
 }
 ```
+
+#### Important Notes:
+
+DCOS provisions by-default with Elastic Load Balancers configured with a `HTTP:80/` health check. The nginx configuration in this proxy service responds with 503 to such requests (as they do not match any vhost record), and will result in all public slaves being reported as `unhealthy`. 
+
+Solutions for this include:
+    - Change your Public Slave ELB to a `TCP:80` health check
+    - Add a `server` block to the `nginx.conf` for a route such as `/elb-status` which responds with `200 OK`
